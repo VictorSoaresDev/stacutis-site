@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHP2Shell scanner — St. Acutis</title>
+<meta name="description" content="A free local scanner for CVE-2026-109618 and CVE-2026-109619 (PHP2Shell).">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><div class="bar"><a class="logo" href="/">St. Acutis</a>
+<nav><a href="/">Home</a><a href="/phpfix/" aria-current="page">PHP Fix</a><a href="/about/">About</a></nav></div></header>
+<main>
+<h1>PHP2Shell scanner</h1>
+<p class="lede">A free, local checker for CVE-2026-109618 and CVE-2026-109619 on Linux servers you administer. Tool version 1.0.0 · CVE data 2026-10-22.</p>
+
+<h2>What is PHP2Shell?</h2>
+<p>PHP2Shell is the name for two critical bugs in PHP core, CVE-2026-109618 and CVE-2026-109619 (CVSS v4.0 9.2), disclosed on 21 October 2026. They are use-after-free bugs that can lead to unauthenticated remote code execution. The fixes are in PHP <strong>8.5.12</strong>, <strong>8.4.27</strong>, <strong>8.3.36</strong> and <strong>8.2.35</strong>.</p>
+<p>Read more: <a href="https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/">PHP Foundation advisory</a> · <a href="https://www.cert.europa.eu/publications/security-advisories/2026-018/">CERT-EU 2026-018</a></p>
+
+<h2>What the script does</h2>
+<ul>
+<li><strong>Scans, read-only, by default.</strong> A plain run changes nothing and does not use the network. It finds CLI <code>php</code>, PHP-FPM, <code>mod_php</code>, php-cgi, FrankenPHP and LiteSpeed <code>lsphp</code>, and reads only the local package changelog to see if a backported fix is present.</li>
+<li><strong>Upgrades only if you ask</strong> (<code>--fix</code>). It uses apt, dnf, yum or apk, and only takes a same-branch package at or above the fixed release (or one whose changelog names both CVEs). It does not compile PHP, add repositories, or move PHP 8.1 and older to a new major version. An upgrade still waits for a separate yes.</li>
+<li><strong>Temporary workarounds, also opt-in</strong> (<code>--workarounds</code>). These do <em>not</em> upgrade PHP; the vulnerable build stays installed. Config is backed up to <code>/var/backups/stacutis/&lt;stamp&gt;/</code> and <code>--rollback &lt;stamp&gt;</code> restores it. Each tradeoff is printed before you confirm.</li>
+<li><strong>Optional read-only extras:</strong> <code>--ioc</code> looks for published indicators (not proof of a break-in) and <code>--containers</code> lists local Docker containers that look like PHP. It does not patch containers.</li>
+</ul>
+<p>Needs bash 4.3 or newer. A scan works without root; <code>--fix</code>, <code>--workarounds</code> and <code>--rollback</code> need root. Exit code 0 means no PHP or everything is patched, 1 means something is vulnerable or only mitigated. Exit 0 does not mean the host was checked for a past break-in. The full flag list is in the <a href="https://github.com/VictorSoaresDev/stacutis-phpfix#readme">README</a>.</p>
+
+<h2>Download</h2>
+<div class="actions">
+<a class="button" href="https://stacutis.com/php2shell.sh" download="stacutis-php2shell.sh">Download php2shell.sh</a>
+<a class="button alt" href="https://github.com/VictorSoaresDev/stacutis-phpfix">View source on GitHub</a>
+</div>
+<p>SHA-256 (from <a href="https://stacutis.com/CHECKSUMS.txt">CHECKSUMS.txt</a>):</p>
+<code class="hash">539a70e4a30ff959343c6e0f3fce1ad16521d3717702724688437b9437b73379</code>
+
+<h2>How to run it</h2>
+<p>Download, check, read, then run. Please don't pipe the download straight into a shell.</p>
+<pre><code>cd /tmp
+curl -fsSL -o stacutis-php2shell.sh https://stacutis.com/php2shell.sh
+curl -fsSL -O https://stacutis.com/CHECKSUMS.txt
+sha256sum -c CHECKSUMS.txt      # must print: stacutis-php2shell.sh: OK
+less stacutis-php2shell.sh      # read it first
+sudo bash stacutis-php2shell.sh # scan only; changes nothing</code></pre>
+<p>If a menu appears, option 4 leaves the server as it is. The checksum catches a broken download, not a replaced repository, since both files live together.</p>
+
+<h2>Disclaimer</h2>
+<p class="warn">Provided as-is, without warranty. Run it only on servers you own or administer. Take a backup before you answer yes to any change. Released under the MIT License.</p>
+</main>
+<footer><div class="bar"><span>St. Acutis · free, useful tech</span><span><a href="https://github.com/VictorSoaresDev">Victor on GitHub</a> · <a href="https://github.com/VictorSoaresDev/stacutis-phpfix">Repo on GitHub</a></span></div></footer>
+</body>
+</html>
