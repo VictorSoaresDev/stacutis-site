@@ -2,4 +2,5 @@
 # A signature is useful only when the public key arrives on a second channel.
 #   gpg --detach-sign --armor --output stacutis-php2shell.sh.asc stacutis-php2shell.sh
 #   minisign -Sm stacutis-php2shell.sh
-539a70e4a30ff959343c6e0f3fce1ad16521d3717702724688437b9437b73379  stacutis-php2shell.sh
+f69b7f32370d7439e79458570776d68105c1b825d095d4b50f4a511ad3ba6db3  stacutis-php2shell.sh
+f69b7f32370d7439e79458570776d68105c1b825d095d4b50f4a511ad3ba6db3  php2shell.sh

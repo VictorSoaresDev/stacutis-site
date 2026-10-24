@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PHP2Shell scanner — St. Acutis</title>
+<title>PHP2Shell scanner | St. Acutis</title>
 <meta name="description" content="A free local scanner for CVE-2026-109618 and CVE-2026-109619 (PHP2Shell).">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/style.css">
@@ -28,19 +28,28 @@
 </ul>
 <p>Needs bash 4.3 or newer. A scan works without root; <code>--fix</code>, <code>--workarounds</code> and <code>--rollback</code> need root. Exit code 0 means no PHP or everything is patched, 1 means something is vulnerable or only mitigated. Exit 0 does not mean the host was checked for a past break-in. The full flag list is in the <a href="https://github.com/VictorSoaresDev/stacutis-phpfix#readme">README</a>.</p>
 
+<h2>What it changes</h2>
+<p>Nothing, unless you pass <code>--fix</code> or <code>--workarounds</code> and answer <code>y</code>. Add <code>--dry-run</code> to see the plan without writing anything. The script never sends data anywhere.</p>
+<ul>
+<li><strong><code>--fix</code>:</strong> upgrades the installed PHP packages with your package manager (same branch only), then restarts PHP-FPM / Apache so workers pick up the new code.</li>
+<li><strong><code>--workarounds</code>:</strong> writes <code>99-stacutis-php2shell.ini</code> in PHP's <code>conf.d</code>, adds a marked block to vulnerable FPM pool files, and on mod_php hosts writes <code>stacutis-php2shell.conf</code> in the Apache config dir. Then restarts those services.</li>
+<li><strong>Undo:</strong> workaround files are backed up to <code>/var/backups/stacutis/&lt;stamp&gt;/</code> first. Run <code>sudo bash stacutis-php2shell.sh --rollback &lt;stamp&gt;</code> to put them back. Package upgrades are not rolled back.</li>
+<li><strong><code>--log</code>:</strong> appends a line to <code>/var/log/stacutis-php2shell.log</code>. Off by default.</li>
+</ul>
+
 <h2>Download</h2>
 <div class="actions">
-<a class="button" href="https://stacutis.com/php2shell.sh" download="stacutis-php2shell.sh">Download php2shell.sh</a>
+<a class="button" href="https://www.stacutis.com/php2shell.sh" download="stacutis-php2shell.sh">Download php2shell.sh</a>
 <a class="button alt" href="https://github.com/VictorSoaresDev/stacutis-phpfix">View source on GitHub</a>
 </div>
-<p>SHA-256 (from <a href="https://stacutis.com/CHECKSUMS.txt">CHECKSUMS.txt</a>):</p>
-<code class="hash">539a70e4a30ff959343c6e0f3fce1ad16521d3717702724688437b9437b73379</code>
+<p>SHA-256 (from <a href="https://www.stacutis.com/CHECKSUMS.txt">CHECKSUMS.txt</a>):</p>
+<code class="hash">f69b7f32370d7439e79458570776d68105c1b825d095d4b50f4a511ad3ba6db3</code>
 
-<h2>How to run it</h2>
+<h2>Verify before running</h2>
 <p>Download, check, read, then run. Please don't pipe the download straight into a shell.</p>
 <pre><code>cd /tmp
-curl -fsSL -o stacutis-php2shell.sh https://stacutis.com/php2shell.sh
-curl -fsSL -O https://stacutis.com/CHECKSUMS.txt
+curl -fsSL -o stacutis-php2shell.sh https://www.stacutis.com/php2shell.sh
+curl -fsSL -O https://www.stacutis.com/CHECKSUMS.txt
 sha256sum -c CHECKSUMS.txt      # must print: stacutis-php2shell.sh: OK
 less stacutis-php2shell.sh      # read it first
 sudo bash stacutis-php2shell.sh # scan only; changes nothing</code></pre>
